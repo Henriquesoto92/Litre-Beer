@@ -1,72 +1,62 @@
 import { useEffect, useState } from "react";
+import { dataProps, tableProps } from "../../@types";
 
-const data = [
-  {
-    name: "Heinken 350",
-    pack: true,
-    qtdpack: 12,
-    mls: 350,
-    price: 35,
-    desc: 1,
-  },
-  {
-    name: "Heinken 600",
-    pack: false,
-    qtdpack: 0,
-    mls: 600,
-    price: 8,
-    desc: 0,
-  },
-  {
-    name: "stella 600",
-    pack: false,
-    qtdpack: 0,
-    mls: 600,
-    price: 10,
-    desc: 10,
-  },
-];
+interface IProps {
+  data: dataProps[];
+}
 
-const Logic = () => {
-  const [resultPrice, setResultPrice] = useState<number>(0);
-  const [resultPrice2, setResultPrice2] = useState<number>(0);
-  const [resultPrice3, setResultPrice3] = useState<number>(0);
+const Logic = ({ data }: IProps) => {
+  const [tableData, setTableData] = useState<tableProps[]>([] as tableProps[]);
 
-  console.log(resultPrice);
-
-  const name = "heineken 350";
-  const pack = true;
-  const qtdPack = 12;
-  const mls = 350;
-  const price = 43.08;
-  const desc = 5;
-
-  const handleOnChange = () => {
-    function calcPrice() {
-      if (pack && desc > 0) {
-        return (price - price * (desc / 100)) / qtdPack;
-      } else if (pack && desc < 1) {
-        return price / qtdPack;
-      } else if (!pack && desc > 0) {
-        return price - price * (desc / 100);
+  useEffect(() => {
+    function calcPrice(item: dataProps) {
+      // se tem pack "amout maior que 0"
+      if (item.amount > 0) {
+        //se tem desconto e o desconto for maior que 0?
+        if (item.desc > 0) {
+          return (item.price - item.price * (item.desc / 100)) / item.amount;
+          // se não ele vai pagar o valor sem desconto multiplicado pela quantidade de packs
+        } else {
+          return item.price / item.amount;
+        }
+        //se é unidade
       } else {
-        return price;
+        // se é unidade e tem desconto
+        if (item.desc > 0) {
+          return item.price - item.price * (item.desc / 100);
+          // se é unidade sem desconto
+        } else {
+          return item.price;
+        }
       }
     }
 
-    function valueMLS() {
-      return (calcPrice() / mls) * 1000;
+    function valueMLS(item: dataProps) {
+      return (calcPrice(item) / item.mls) * 1000;
     }
 
-    console.log(valueMLS(), "valueMLS");
-    setResultPrice(valueMLS());
-  };
+    setTableData(
+      data.map((map) => {
+        return { ...map, total: valueMLS(map) };
+      })
+    );
+
+    console.log(tableData, "datalogic");
+  }, [data]);
 
   return (
     <>
-      <button className="text-5xl" onClick={handleOnChange}>
-        o valor do litro da {name} é de R${resultPrice}
-      </button>
+      {tableData.map((item, index) => (
+        <p key={`${item.name}${index}`}>
+          o valor do litro da {item.name} é de
+          {new Intl.NumberFormat("pt-BR", {
+            currency: "BRL",
+            style: "currency",
+          }).format(item?.total)}
+          , com {item.mls}
+          Mls e valor por unidade de {item.price}
+        </p>
+      ))}
     </>
   );
 };

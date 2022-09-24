@@ -1,8 +1,17 @@
-export interface dataprops {
+export interface dataProps {
   name: string;
-  pack: boolean;
-  qtdpack: string;
+  amount: number;
   mls: number;
   price: number;
-  desc?: number;
+  desc: number;
+  total?: number;
+}
+
+export interface tableProps {
+  name: string;
+  amount: number;
+  mls: number;
+  price: number;
+  desc: number;
+  total: number;
 }
