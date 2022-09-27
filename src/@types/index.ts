@@ -1,4 +1,4 @@
-export interface dataProps {
+export interface DataProps {
   name: string;
   amount: number;
   mls: number;
@@ -7,11 +7,7 @@ export interface dataProps {
   total?: number;
 }
 
-export interface tableProps {
-  name: string;
-  amount: number;
-  mls: number;
-  price: number;
-  desc: number;
-  total: number;
+export interface TableProps extends DataProps {
+  total: number
 }
+

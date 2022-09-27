@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { dataProps, tableProps } from "../../@types";
+import { DataProps, TableProps } from "../../@types";
 
-interface IProps {
-  data: dataProps[];
+interface LogicProps {
+  data: DataProps[];
 }
 
-const Logic = ({ data }: IProps) => {
-  const [tableData, setTableData] = useState<tableProps[]>([] as tableProps[]);
+const Logic = ({ data }: LogicProps) => {
+  const [tableData, setTableData] = useState<TableProps[]>([] as TableProps[]);
 
   useEffect(() => {
-    function calcPrice(item: dataProps) {
+    function calcPrice(item: DataProps) {
       // se tem pack "amout maior que 0"
       if (item.amount > 0) {
         //se tem desconto e o desconto for maior que 0?
@@ -31,7 +31,7 @@ const Logic = ({ data }: IProps) => {
       }
     }
 
-    function valueMLS(item: dataProps) {
+    function valueMLS(item: DataProps) {
       return (calcPrice(item) / item.mls) * 1000;
     }
 
