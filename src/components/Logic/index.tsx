@@ -1,3 +1,4 @@
+import { Table } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { DataProps, TableProps } from "../../@types";
 
@@ -44,20 +45,58 @@ const Logic = ({ data }: LogicProps) => {
     console.log(tableData, "datalogic");
   }, [data]);
 
+  const rows = tableData.map((item, index) => (
+    <tr key={`${item.name}${index}`}>
+      <td>{item.name}</td>
+      <td>
+        {item.mls}
+        {"  "}mls
+      </td>
+      <td>{item.amount}</td>
+      <td>
+        {new Intl.NumberFormat("pt-BR", {
+          currency: "BRL",
+          style: "currency",
+        }).format(item?.price)}
+      </td>
+      <td>
+        {item.desc}
+        {"  "}%
+      </td>
+      <td>
+        {new Intl.NumberFormat("pt-BR", {
+          currency: "BRL",
+          style: "currency",
+        }).format(item?.total)}
+      </td>
+    </tr>
+  ));
+
   return (
-    <>
-      {tableData.map((item, index) => (
-        <p key={`${item.name}${index}`}>
-          o valor do litro da {item.name} é de
-          {new Intl.NumberFormat("pt-BR", {
-            currency: "BRL",
-            style: "currency",
-          }).format(item?.total)}
-          , com {item.mls}
-          Mls e valor por unidade de {item.price}
-        </p>
-      ))}
-    </>
+    <Table striped highlightOnHover style={{ maxWidth: "320px" }}>
+      <thead
+        style={{
+          background: "#D9D9D9",
+          color: "#352F29",
+        }}
+      >
+        <tr>
+          <th>Cerveja</th>
+          <th>Mls</th>
+          <th>Qtd</th>
+          <th>Preço</th>
+          <th>Desconto</th>
+          <th>Preço Litro</th>
+        </tr>
+      </thead>
+      <tbody
+        style={{
+          color: "#352F29",
+        }}
+      >
+          {rows}
+        </tbody>
+    </Table>
   );
 };
 

@@ -2,9 +2,17 @@ import { useState } from "react";
 import { DataProps, TableProps } from "./@types";
 import Logic from "./components/Logic";
 import { useForm } from "react-hook-form";
+import {
+  Button,
+  Group,
+  NumberInput,
+  SegmentedControl,
+  TextInput,
+} from "@mantine/core";
 
 function App() {
   const [pack, setPack] = useState<boolean>(false);
+  const [pack1, setPack1] = useState<string>("unit");
   const [arrayTable, setArrayTable] = useState<DataProps[]>([]);
   const { register, handleSubmit, resetField, reset } = useForm<DataProps>({
     defaultValues: {
@@ -15,7 +23,6 @@ function App() {
       price: 0,
     },
   });
-
   console.log(arrayTable);
 
   const handleFormSubmit = (data: DataProps) => {
@@ -41,139 +48,121 @@ function App() {
         className="form-control w-full max-w-xs gap-2.5 mt-2.5 p-2.5 bg-[#D9D9D9] rounded-[12px]"
       >
         {/* NOME */}
-        <div>
-          <label className="label">
-            <span className="label-text font-bold text-2xl text-[#352F29]">
-              Qual a cerveja?
-            </span>
-          </label>
-          <input
-            type="text"
-            {...register("name")}
-            placeholder="Qual a cerveja?"
-            className="input input-bordered w-full max-w-xs font-bold text-2xl bg-[#EDF2F7]  border-[1px] border-[#776F69] "
-          />
-        </div>
+
+        <TextInput
+          placeholder="Nome da cerveja"
+          label="Qual a cerveja?"
+          withAsterisk
+          {...register("name")}
+          radius="md"
+        />
 
         {/* TEM PACK */}
-        <div className="btn-group p-0 mt-2 bg-[#EDF2F7] border-[1px] border-[#776F69] rounded-btn ">
-          <button
-            type="button"
-            className="btn btn-active w-1/2 bg-yellow"
-            onClick={() => {
-              resetField("amount");
-              setPack(false);
-            }}
-          >
-            Unidade
-          </button>
-          <button
-            type="button"
-            className="btn w-1/2"
-            onClick={() => {
-              setPack(true);
-            }}
-          >
-            Pack
-          </button>
-        </div>
+        <SegmentedControl
+          value={pack1}
+          onChange={setPack1}
+          data={[
+            { label: "Unidade", value: "unit" },
+            { label: "Pack", value: "pack" },
+          ]}
+          color="yellow"
+          radius={8}
+          transitionDuration={500}
+          transitionTimingFunction="linear"
+          style={{ border: "1px solid gray" }}
+        />
 
         {/* QTD DO PACK */}
-        {pack && (
-          <div>
-            <label className="label">
-              <span className="label-text font-bold text-2xl text-[#352F29]">
-                Qual a quantidade (em unidades)?
-              </span>
-            </label>
-            <input
-              defaultValue={0}
-              required
-              type="number"
-              {...register("amount", {
-                valueAsNumber: true,
-              })}
-              placeholder="Qual a quantidade (em unidades)?"
-              className="input input-bordered w-full max-w-xs font-bold text-2xl bg-[#EDF2F7]  border-[1px] border-[#776F69]"
-            />
-          </div>
+        {pack1 === "pack" && (
+          <TextInput
+            placeholder="Quantas unidades do pack?"
+            label="Quantas unidades do pack?"
+            withAsterisk
+            {...register("amount", {
+              valueAsNumber: true,
+              required: true,
+              min: 1,
+            })}
+            radius="md"
+          />
         )}
 
         {/* PREÇO */}
-        <div>
-          <label className="label">
-            <span className="label-text font-bold text-2xl text-[#352F29]">
-              Qual o valor?
-            </span>
-          </label>
-          <input
-            min={1}
-            required
-            step={0.01}
-            {...register("price", { valueAsNumber: true })}
-            type="number"
-            placeholder="Qual o valor?"
-            className="input input-bordered w-full max-w-xs font-bold text-2xl bg-[#EDF2F7]  border-[1px] border-[#776F69]"
-          />
-        </div>
+        <TextInput
+          placeholder="Qual o valor?"
+          label="Qual o valor?"
+          withAsterisk
+          {...register("price", {
+            valueAsNumber: true,
+            required: true,
+            min: 1,
+          })}
+          step={0.01}
+          radius="md"
+        />
 
         {/* MLS */}
-        <div>
-          <label className="label">
-            <span className="label-text font-bold text-2xl text-[#352F29]">
-              Quantas Mls da unidade?
-            </span>
-          </label>
-          <input
-            min={1}
-            required
-            type="number"
-            {...register("mls", { valueAsNumber: true })}
-            placeholder="Quantas Mls da unidade?"
-            className="input input-bordered w-full max-w-xs font-bold text-2xl bg-[#EDF2F7]  border-[1px] border-[#776F69]"
-          />
-        </div>
+        <TextInput
+          placeholder="Mls"
+          label="Quantas Mls da unidade?"
+          withAsterisk
+          {...register("mls", {
+            valueAsNumber: true,
+            required: true,
+            min: 1,
+          })}
+          radius="md"
+        />
 
         {/* DESCONTO */}
-        <div>
-          <label className="label">
-            <span className="label-text font-bold text-2xl text-[#352F29]">
-              Desconto?
-            </span>
-          </label>
-          <input
-            min={0}
-            max={100}
-            type="number"
-            {...register("desc", { valueAsNumber: true })}
-            placeholder="Desconto?"
-            className="input input-bordered w-full max-w-xs font-bold text-2xl bg-[#EDF2F7] border-[1px] border-[#776F69]"
-          />
-        </div>
+        <TextInput
+          defaultValue={0}
+          placeholder="%"
+          label="Desconto?"
+          withAsterisk
+          {...register("desc", {
+            valueAsNumber: true,
+            required: true,
+            min: 1,
+            max: 100,
+          })}
+          radius="md"
+        />
 
         {/* BOTÕES */}
-        <div className="flex gap-5 mt-5 justify-center">
-          <button className="btn flex-1 bg-yellow" type="submit">
+        <Group grow>
+          <Button
+            variant="filled"
+            color="yellow"
+            type="submit"
+            radius="md"
+            size="md"
+          >
             Calcular
-          </button>
-          <button
-            className="btn flex-1 bg-yellow bg-opacity-1"
+          </Button>
+          <Button
+            variant="outline"
+            color="yellow"
+            radius="md"
             onClick={() => reset()}
+            size="md"
           >
             Apagar
-          </button>
-        </div>
+          </Button>
+        </Group>
       </form>
-      <button
-        className="btn flex-1 bg-yellow bg-opacity-1"
+      <Button
+        variant="filled"
+        color="yellow"
+        radius="md"
+        size="md"
         onClick={() => resetResults()}
       >
         resetar resultados
-      </button>
+      </Button>
 
       <Logic data={arrayTable} />
     </div>
   );
 }
-
 export default App;
