@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { dataProps } from "./@types";
+import { DataProps, TableProps } from "./@types";
 import Logic from "./components/Logic";
 import { useForm } from "react-hook-form";
 
 function App() {
   const [pack, setPack] = useState<boolean>(false);
-  const [arrayTable, setArrayTable] = useState<dataProps[]>([]);
-  const { register, handleSubmit, resetField, reset } = useForm<dataProps>({
+  const [arrayTable, setArrayTable] = useState<DataProps[]>([]);
+  const { register, handleSubmit, resetField, reset } = useForm<DataProps>({
     defaultValues: {
       amount: 0,
       desc: 0,
@@ -18,7 +18,7 @@ function App() {
 
   console.log(arrayTable);
 
-  const handleFormSubmit = (data: dataProps) => {
+  const handleFormSubmit = (data: DataProps) => {
     setArrayTable((prev) => [...prev, data]);
     reset();
   };
