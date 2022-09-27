@@ -2,13 +2,7 @@ import { useState } from "react";
 import { DataProps, TableProps } from "./@types";
 import Logic from "./components/Logic";
 import { useForm } from "react-hook-form";
-import {
-  Button,
-  Group,
-  NumberInput,
-  SegmentedControl,
-  TextInput,
-} from "@mantine/core";
+import { Button, Group, SegmentedControl, TextInput } from "@mantine/core";
 
 function App() {
   const [pack, setPack] = useState<boolean>(false);
@@ -29,7 +23,6 @@ function App() {
     setArrayTable((prev) => [...prev, data]);
     reset();
   };
-
   const resetResults = () => {
     setArrayTable([]);
   };
