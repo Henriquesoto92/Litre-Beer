@@ -1,12 +1,14 @@
-import { Table } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { ActionIcon, Button, Table } from "@mantine/core";
+import { ReactComponentElement, useEffect, useState } from "react";
 import { DataProps, TableProps } from "../../@types";
+import { IconDiscount, IconTrashX } from "@tabler/icons";
 
 interface LogicProps {
   data: DataProps[];
+  setArrayTable: React.Dispatch<React.SetStateAction<DataProps[]>>;
 }
 
-const Logic = ({ data }: LogicProps) => {
+const Logic = ({ data, setArrayTable }: LogicProps) => {
   const [tableData, setTableData] = useState<TableProps[]>([] as TableProps[]);
 
   useEffect(() => {
@@ -45,6 +47,16 @@ const Logic = ({ data }: LogicProps) => {
     console.log(tableData, "datalogic");
   }, [data]);
 
+  const deleteRow = (idItem: number) => {
+    const tableDataFiltered = tableData.filter((item, index) => {
+      if (index != idItem) {
+        return item;
+      }
+    });
+    setArrayTable(tableDataFiltered);
+    console.log(tableDataFiltered);
+  };
+
   const rows = tableData.map((item, index) => (
     <tr key={`${item.name}${index}`}>
       <td>{item.name}</td>
@@ -69,6 +81,19 @@ const Logic = ({ data }: LogicProps) => {
           style: "currency",
         }).format(item?.total)}
       </td>
+      <td>
+        <ActionIcon
+          color="yellow"
+          variant="transparent"
+          id={index.toString()}
+          onClick={(e: any) => {
+            console.log(e.target.closest("button").id);
+            deleteRow(Number(e.target.closest("button").id));
+          }}
+        >
+          <IconTrashX size={26} />
+        </ActionIcon>
+      </td>
     </tr>
   ));
 
@@ -84,9 +109,12 @@ const Logic = ({ data }: LogicProps) => {
           <th>Cerveja</th>
           <th>Mls</th>
           <th>Qtd</th>
-          <th>Preço</th>
-          <th>Desconto</th>
-          <th>Preço Litro</th>
+          <th>R$</th>
+          <th>
+            <IconDiscount />
+          </th>
+          <th>R$/L</th>
+          <th>{"  "}</th>
         </tr>
       </thead>
       <tbody
@@ -94,8 +122,8 @@ const Logic = ({ data }: LogicProps) => {
           color: "#352F29",
         }}
       >
-          {rows}
-        </tbody>
+        {rows}
+      </tbody>
     </Table>
   );
 };
