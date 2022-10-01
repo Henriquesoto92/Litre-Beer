@@ -1,7 +1,8 @@
-import { ActionIcon, Button, Table } from "@mantine/core";
-import { ReactComponentElement, useEffect, useState } from "react";
+import { Table } from "@mantine/core";
+import { useEffect, useState } from "react";
 import { DataProps, TableProps } from "../../@types";
-import { IconDiscount, IconTrashX } from "@tabler/icons";
+import { IconDiscount } from "@tabler/icons";
+import RowsTable from "./Rows";
 
 interface LogicProps {
   data: DataProps[];
@@ -43,8 +44,6 @@ const Logic = ({ data, setArrayTable }: LogicProps) => {
         return { ...map, total: valueMLS(map) };
       })
     );
-
-    console.log(tableData, "datalogic");
   }, [data]);
 
   const deleteRow = (idItem: number) => {
@@ -56,46 +55,6 @@ const Logic = ({ data, setArrayTable }: LogicProps) => {
     setArrayTable(tableDataFiltered);
     console.log(tableDataFiltered);
   };
-
-  const rows = tableData.map((item, index) => (
-    <tr key={`${item.name}${index}`}>
-      <td>{item.name}</td>
-      <td>
-        {item.mls}
-        {"  "}mls
-      </td>
-      <td>{item.amount}</td>
-      <td>
-        {new Intl.NumberFormat("pt-BR", {
-          currency: "BRL",
-          style: "currency",
-        }).format(item?.price)}
-      </td>
-      <td>
-        {item.desc}
-        {"  "}%
-      </td>
-      <td>
-        {new Intl.NumberFormat("pt-BR", {
-          currency: "BRL",
-          style: "currency",
-        }).format(item?.total)}
-      </td>
-      <td>
-        <ActionIcon
-          color="yellow"
-          variant="transparent"
-          id={index.toString()}
-          onClick={(e: any) => {
-            console.log(e.target.closest("button").id);
-            deleteRow(Number(e.target.closest("button").id));
-          }}
-        >
-          <IconTrashX size={26} />
-        </ActionIcon>
-      </td>
-    </tr>
-  ));
 
   return (
     <Table striped highlightOnHover style={{ maxWidth: "320px" }}>
@@ -122,7 +81,7 @@ const Logic = ({ data, setArrayTable }: LogicProps) => {
           color: "#352F29",
         }}
       >
-        {rows}
+        <RowsTable tableData={tableData} deleteRow={deleteRow} />
       </tbody>
     </Table>
   );
