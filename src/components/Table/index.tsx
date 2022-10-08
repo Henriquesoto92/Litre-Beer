@@ -1,8 +1,9 @@
 import { Table as TableMantine } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DataProps, TableProps } from "../../@types";
 import { IconDiscount } from "@tabler/icons";
-import RowsTable from "./RowsTable";
+import RowsTable from "../RowsTable";
+import { useCalcPrice } from "../../hooks/useCalcPrice";
 
 interface LogicProps {
   data: DataProps[];
@@ -10,51 +11,11 @@ interface LogicProps {
 }
 
 const Table = ({ data, setArrayTable }: LogicProps) => {
-  const [tableData, setTableData] = useState<TableProps[]>([] as TableProps[]);
+  const { calculedData, handleExcludeById } = useCalcPrice(data);
 
-  console.log(tableData, "tabledata");
-  useEffect(() => {
-    function calcPrice(item: DataProps) {
-      // se tem pack "amout maior que 0"
-      if (item.amount > 0) {
-        //se tem desconto e o desconto for maior que 0?
-        if (item.desc > 0) {
-          return (item.price - item.price * (item.desc / 100)) / item.amount;
-          // se não ele vai pagar o valor sem desconto multiplicado pela quantidade de packs
-        } else {
-          return item.price / item.amount;
-        }
-        //se é unidade
-      } else {
-        // se é unidade e tem desconto
-        if (item.desc > 0) {
-          return item.price - item.price * (item.desc / 100);
-          // se é unidade sem desconto
-        } else {
-          return item.price;
-        }
-      }
-    }
-
-    function valueMLS(item: DataProps) {
-      return (calcPrice(item) / item.mls) * 1000;
-    }
-
-    setTableData(
-      data.map((map) => {
-        return { ...map, total: valueMLS(map) };
-      })
-    );
-  }, [data]);
-
-  const deleteRow = (idItem: number) => {
-    const tableDataFiltered = tableData.filter((item, index) => {
-      if (index != idItem) {
-        return item;
-      }
-    });
-    setArrayTable(tableDataFiltered);
-    console.log(tableDataFiltered);
+  const handleDelete = (index: number) => {
+    const newArray = handleExcludeById(index, data);
+    setArrayTable(newArray);
   };
 
   return (
@@ -82,10 +43,10 @@ const Table = ({ data, setArrayTable }: LogicProps) => {
           color: "#352F29",
         }}
       >
-        {tableData.map((item, index) => (
+        {calculedData.map((item, index) => (
           <RowsTable
             tableData={item}
-            deleteRow={deleteRow}
+            onDeleteRow={handleDelete}
             key={`${item.name}${index}`}
             index={index}
           />
