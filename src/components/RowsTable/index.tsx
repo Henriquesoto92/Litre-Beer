@@ -4,11 +4,11 @@ import { TableProps } from "../../@types";
 
 interface RowsTableProps {
   tableData: TableProps;
-  deleteRow: any;
+  onDeleteRow: (index: number) => void;
   index: number;
 }
 
-const RowsTable = ({ tableData, deleteRow, index }: RowsTableProps) => {
+const RowsTable = ({ tableData, onDeleteRow, index }: RowsTableProps) => {
   console.log(tableData, "receive table data");
   return (
     <tr>
@@ -41,7 +41,7 @@ const RowsTable = ({ tableData, deleteRow, index }: RowsTableProps) => {
           id={index.toString()}
           onClick={(e: any) => {
             console.log(e.target.closest("button").id);
-            deleteRow(Number(e.target.closest("button").id));
+            onDeleteRow(Number(e.target.closest("button").id));
           }}
         >
           <IconTrashX size={26} />
