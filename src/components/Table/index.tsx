@@ -1,17 +1,18 @@
-import { Table } from "@mantine/core";
+import { Table as TableMantine } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { DataProps, TableProps } from "../../@types";
 import { IconDiscount } from "@tabler/icons";
-import RowsTable from "./Rows";
+import RowsTable from "./RowsTable";
 
 interface LogicProps {
   data: DataProps[];
   setArrayTable: React.Dispatch<React.SetStateAction<DataProps[]>>;
 }
 
-const Logic = ({ data, setArrayTable }: LogicProps) => {
+const Table = ({ data, setArrayTable }: LogicProps) => {
   const [tableData, setTableData] = useState<TableProps[]>([] as TableProps[]);
 
+  console.log(tableData, "tabledata");
   useEffect(() => {
     function calcPrice(item: DataProps) {
       // se tem pack "amout maior que 0"
@@ -57,7 +58,7 @@ const Logic = ({ data, setArrayTable }: LogicProps) => {
   };
 
   return (
-    <Table striped highlightOnHover style={{ maxWidth: "320px" }}>
+    <TableMantine striped highlightOnHover style={{ maxWidth: "320px" }}>
       <thead
         style={{
           background: "#D9D9D9",
@@ -81,10 +82,17 @@ const Logic = ({ data, setArrayTable }: LogicProps) => {
           color: "#352F29",
         }}
       >
-        <RowsTable tableData={tableData} deleteRow={deleteRow} />
+        {tableData.map((item, index) => (
+          <RowsTable
+            tableData={item}
+            deleteRow={deleteRow}
+            key={`${item.name}${index}`}
+            index={index}
+          />
+        ))}
       </tbody>
-    </Table>
+    </TableMantine>
   );
 };
 
-export default Logic;
+export default Table;

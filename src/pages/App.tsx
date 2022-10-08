@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { DataProps } from "../@types";
-import Logic from "../components/Table";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -17,7 +16,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import ButtonTheme from "../components/ButtonTheme";
+import { ButtonTheme, Table } from "../components";
 
 function App() {
   const [pack1, setPack1] = useState<string>("unit");
@@ -28,6 +27,7 @@ function App() {
     },
   });
 
+  console.log(arrayTable);
   const handleFormSubmit = (data: DataProps) => {
     setArrayTable((prev) => [...prev, data]);
     reset();
@@ -66,11 +66,9 @@ function App() {
               width: "320px",
             }}
           >
-            {/* className="text-5xl font-extrabold text-center text-[#352F29]" */}
             <Title style={{ textAlign: "center", color: "#352F29" }}>
               Preço/Litro
             </Title>
-            {/* className="w-full max-w-xs text-center mt-2.5 font-bold text-2xl text-[#352F29]" */}
             <Text style={{ textAlign: "center", color: "#352F29" }}>
               Calcule de forma facil e rapida o preço do litro da cerveja
             </Text>
@@ -87,7 +85,6 @@ function App() {
                 gap: "10px",
               }}
               onSubmit={handleSubmit(handleFormSubmit)}
-              // className="form-control w-full max-w-xs gap-2.5 mt-2.5 p-2.5 bg-[#D9D9D9] rounded-[12px]"
             >
               {/* NOME */}
               <TextInput
@@ -206,7 +203,7 @@ function App() {
             >
               resetar resultados
             </Button>
-            <Logic data={arrayTable} setArrayTable={setArrayTable} />
+            <Table data={arrayTable} setArrayTable={setArrayTable} />
           </Container>
         </Box>
       </MantineProvider>
