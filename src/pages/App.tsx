@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { DataProps } from "../@types";
 import { useForm } from "react-hook-form";
 import {
@@ -21,24 +21,26 @@ import { ButtonTheme, Table } from "../components";
 function App() {
   const [pack1, setPack1] = useState<string>("unit");
   const [arrayTable, setArrayTable] = useState<DataProps[]>([]);
-  const { register, handleSubmit, resetField, reset } = useForm<DataProps>({
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+
+  const { register, handleSubmit, reset } = useForm<DataProps>({
     defaultValues: {
       name: "",
     },
   });
 
-  console.log(arrayTable);
-  const handleFormSubmit = (data: DataProps) => {
-    setArrayTable((prev) => [...prev, data]);
-    reset();
-  };
-  const resetResults = () => {
-    setArrayTable([]);
-  };
+  const handleFormSubmit = useCallback(
+    (data: DataProps) => {
+      setArrayTable((prev) => [...prev, data]);
+      reset();
+    },
+    [reset]
+  );
 
-  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const resetResults = () => setArrayTable([]);
+
   const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+    setColorScheme((prev) => value || (prev === "dark" ? "light" : "dark"));
 
   return (
     <ColorSchemeProvider
@@ -199,7 +201,7 @@ function App() {
               color="yellow"
               radius="md"
               size="md"
-              onClick={() => resetResults()}
+              onClick={resetResults}
             >
               resetar resultados
             </Button>
