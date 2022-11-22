@@ -119,6 +119,7 @@ function App() {
                   placeholder="Quantas unidades do pack?"
                   label="Quantas unidades do pack?"
                   defaultValue={0}
+                  type="number"
                   {...register("amount", {
                     valueAsNumber: true,
                     min: 1,
@@ -130,6 +131,7 @@ function App() {
 
               {/* PREÇO */}
               <TextInput
+                type="number"
                 placeholder="Qual o valor?"
                 label="Qual o valor?"
                 defaultValue={0}
@@ -146,6 +148,7 @@ function App() {
 
               {/* MLS */}
               <TextInput
+                type="number"
                 placeholder="Mls"
                 defaultValue={0}
                 label="Quantas Mls da unidade?"
@@ -161,6 +164,7 @@ function App() {
 
               {/* DESCONTO */}
               <TextInput
+                type="number"
                 defaultValue={0}
                 placeholder="%"
                 label="Desconto?"
